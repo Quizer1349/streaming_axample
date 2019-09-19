@@ -26,12 +26,12 @@ struct MediaModel: Codable {
     
     init(from decoder: Decoder) throws {
         do{
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        title = try container.decode(String?.self, forKey: .title)
-        playlist = try container.decode([MediaPlaylistData]?.self, forKey: .playlist)
-    } catch {
-    print(error)
-    }
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            title = try container.decode(String?.self, forKey: .title)
+            playlist = try container.decode([MediaPlaylistData]?.self, forKey: .playlist)
+        } catch {
+            print(error)
+        }
     }
     
     func convertToStream() -> Stream? {
