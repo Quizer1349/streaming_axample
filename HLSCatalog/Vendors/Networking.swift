@@ -8,27 +8,6 @@
 
 import Foundation
 
-extension URLRequest {
-
-    mutating func urlEncodeParameters(parameters: [String : String]) {
-        guard let url = self.url else { return }
-        if let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            var queryParams = [URLQueryItem]()
-            for (key, value) in parameters {
-                queryParams.append(URLQueryItem(name: key, value: value))
-            }
-            if !queryParams.isEmpty {
-                self.url = urlComponents.url
-            }
-        }
-    }
-    
-    mutating func jsonEncodeParams(parameters: [String : String]) {
-        self.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
-    }
-}
-
 enum HttpMethods: String {
     case get = "GET"
     case post = "POST"
@@ -143,5 +122,26 @@ struct Networking {
         default:
             request.jsonEncodeParams(parameters: params)
         }
+    }
+}
+
+// MARK: - URLRequest extension for params encoding
+extension URLRequest {
+    mutating func urlEncodeParameters(parameters: [String : String]) {
+        guard let url = self.url else { return }
+        if let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) {
+            var queryParams = [URLQueryItem]()
+            for (key, value) in parameters {
+                queryParams.append(URLQueryItem(name: key, value: value))
+            }
+            if !queryParams.isEmpty {
+                self.url = urlComponents.url
+            }
+        }
+    }
+    
+    mutating func jsonEncodeParams(parameters: [String : String]) {
+        self.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
     }
 }
